@@ -1,0 +1,21 @@
+# todo: complete the file to be prod ready
+localhost:1836 {
+	root * ./app
+	encode zstd gzip
+	php_fastcgi unix//tmp/php-fpm.sock
+
+	file_server {
+		index index.php
+	}
+
+	header {
+		X-XSS-Protection "1; mode=block"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+	}
+
+	@dotFiles {
+		path */.*
+		not path /.well-known/*
+	}
+}

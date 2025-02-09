@@ -1,0 +1,10 @@
+@font-face {
+        font-family: "Roboto Mono";
+        src: url("/public/roboto.woff2") format("woff2 supports variations"),
+                url("/public/roboto.woff2") format("woff2-variations");
+        font-display: swap;
+}
+
+* {
+        font-family: 'Roboto Mono', serif;
+}

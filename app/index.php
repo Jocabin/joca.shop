@@ -1,16 +1,15 @@
 <?php
-$viewDir = '/views/';
-$logDir = '/logs/';
 $route = $_SERVER['REQUEST_URI'];
 $route_params = [];
+$page_title = '';
 $hxRequest = isset($_SERVER['HTTP_HX_REQUEST']) && $_SERVER['HTTP_HX_REQUEST'] == 'true';
 
 register_shutdown_function(function () {
-        global $content, $hxRequest, $viewDir;
+        global $content, $hxRequest, $viewDir, $page_title;
         if ($hxRequest) {
                 echo $content;
         } else {
-                require __DIR__ . $viewDir . '_layout.php';
+                require __DIR__ . '/views/_layout.php';
         }
 });
 
@@ -70,8 +69,9 @@ function route_with_params(string $str): bool
 
 function page_not_found(): void
 {
+        global $content;
         http_response_code(404);
-        require '404.php';
+        require __DIR__  . '/views/404.php';
         $content = ob_get_clean();
         die;
 }
@@ -93,27 +93,26 @@ if (str_ends_with($route, '/')) {
 switch ($route) {
         case '':
         case '/':
-                require __DIR__ . $viewDir . 'home.php';
+                $page_title = 'joca.shop | We are the best.';
+                require __DIR__ . '/views/home.php';
                 break;
 
         case '/about':
-                require __DIR__ . $viewDir . 'about.php';
-                break;
-
-        case '/products':
-                require __DIR__ . $viewDir . 'products.php';
+                $page_title = 'joca.shop | About us.';
+                require __DIR__ . '/views/about.php';
                 break;
 
         case route_with_params('/products/[id]'):
-                require __DIR__ . $viewDir . 'product_detail.php';
+                require __DIR__ . '/views/product_detail.php';
                 break;
 
-        case '/htmx':
-                echo '<p>hello</p>';
-                break;
+                // case '/htmx':
+                //         echo '<p>hello</p>';
+                //         break;
 
         default:
+                $page_title = 'joca.shop | Page not found.';
                 http_response_code(404);
-                require __DIR__ . $viewDir . '404.php';
+                require __DIR__ . '/views/404.php';
 }
 $content = ob_get_clean();

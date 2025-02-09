@@ -4,6 +4,8 @@ $product = fetch_json("https://api.escuelajs.co/api/v1/products/" . $route_param
 if (isset($product['error'])) {
         page_not_found();
 }
+
+$page_title = 'joca.shop | ' . $product['title'] . '.';
 ?>
 
 <p>Nom du produit: <?= $product['title'] ?></p>

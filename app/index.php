@@ -73,7 +73,7 @@ function page_not_found(): void
         http_response_code(404);
         require __DIR__  . '/views/404.php';
         $content = ob_get_clean();
-        die;
+        exit();
 }
 
 function fetch_json(string $url): mixed
@@ -86,14 +86,20 @@ function fetch_json(string $url): mixed
 }
 
 session_start();
+if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = [];
+}
+
 ob_start();
 if (str_ends_with($route, '/')) {
         $route = substr_replace($route, '', -1);
 }
 
+// todo: refactor pour ressembler à echo web server
 switch ($route) {
         case '':
         case '/':
+                // todo: en faire une fonction title
                 $page_title = 'joca.shop | We are the best.';
                 require __DIR__ . '/views/home.php';
                 break;
@@ -132,10 +138,22 @@ switch ($route) {
                 break;
 
         case '/add-to-cart':
-                if (!isset($_GET['product_id'])) {
-                        return 'erreur';
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                        $product_id = $_POST['product_id'];
+                        $product_name = $_POST['product_name'];
+                        $product_price = $_POST['product_price'];
+                        $cart_item = [
+                                'id' => $product_id,
+                                'name' => $product_name,
+                                'price' => $product_price
+                        ];
+
+                        $_SESSION['cart'][$product_id] = $cart_item;
                 }
-                $_SESSION['cart'] = [];
+
+                header('Location: /products/' . $product_id);
+                exit();
+
                 break;
 
         default:

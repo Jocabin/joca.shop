@@ -13,6 +13,7 @@ $page_title = 'joca.shop | ' . $product['title'] . '.';
 <div class="flex flex-col justify-start items-center gap-4 p-8">
         <div class="flex flex-col justify-center items-center">
                 <div id="product_img" class="max-w-[500px] max-h-[500px] bg-gray-100 rounded overflow-hidden">
+                        <p><?= $product['images'][0] ?></p>
                         <img src="<?= $product['images'][$_SESSION['img_index']] ?>" alt="<?= $product['description'] ?>" width="500" height="500">
                 </div>
 
@@ -26,6 +27,9 @@ $page_title = 'joca.shop | ' . $product['title'] . '.';
 
         <form action="/add-to-cart" method="post" class="flex flex-row justify-start items-end gap-4">
                 <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
-                <button class="button">Buy for <?= $product['price'] ?>€</button>
+                <input type="hidden" name="product_name" value="<?= $product['title'] ?>">
+                <input type="hidden" name="product_price" value="<?= $product['price'] ?>">
+
+                <button type="submit" class="button">Buy for <?= $product['price'] ?>€</button>
         </form>
 </div>

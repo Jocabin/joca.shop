@@ -1,8 +1,5 @@
 <?php
-$cart_count = 0;
-if (isset($_SESSION['cart'])) {
-        $cart_count = count($_SESSION['cart']);
-}
+$cart_count = count($_SESSION['cart']);
 ?>
 
 <header class="w-full flex flex-row justify-between items-center gap-4 p-8 border-b border-gray-200 sticky top-0 bg-white">

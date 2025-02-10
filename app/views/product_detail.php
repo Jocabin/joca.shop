@@ -13,7 +13,6 @@ $page_title = 'joca.shop | ' . $product['title'] . '.';
 <div class="flex flex-col justify-start items-center gap-4 p-8">
         <div class="flex flex-col justify-center items-center">
                 <div id="product_img" class="max-w-[500px] max-h-[500px] bg-gray-100 rounded overflow-hidden">
-                        <p><?= $product['images'][0] ?></p>
                         <img src="<?= $product['images'][$_SESSION['img_index']] ?>" alt="<?= $product['description'] ?>" width="500" height="500">
                 </div>
 

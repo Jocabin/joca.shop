@@ -76,6 +76,12 @@ function page_not_found(): void
         exit();
 }
 
+function title(string $str): void
+{
+        global $page_title;
+        $page_title =  "joca.shop | " . $str;
+}
+
 function fetch_json(string $url): mixed
 {
         $ch = curl_init($url);
@@ -99,8 +105,7 @@ if (str_ends_with($route, '/')) {
 switch ($route) {
         case '':
         case '/':
-                // todo: en faire une fonction title
-                $page_title = 'joca.shop | We are the best.';
+                title('We are the best.');
                 require __DIR__ . '/views/home.php';
                 break;
 
@@ -109,7 +114,7 @@ switch ($route) {
                 exit();
 
         case '/about':
-                $page_title = 'joca.shop | About us.';
+                title('About us.');
                 require __DIR__ . '/views/about.php';
                 break;
 
@@ -118,7 +123,7 @@ switch ($route) {
                 break;
 
         case '/cart':
-                $page_title = 'joca.shop | Your cart.';
+                title('Your cart.');
                 require __DIR__ . '/views/cart.php';
                 break;
 

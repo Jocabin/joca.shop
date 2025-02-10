@@ -10,9 +10,17 @@
         <meta name="description" content="A simplest but functionnal e-commerce website." />
         <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
         <link rel="preload" href="/public/roboto.woff2" as="font" type="font/woff2" crossorigin />
-        <link rel="stylesheet" href="/public/styles.css">
         <!-- todo: use tailwind cli for production -->
         <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+        <link rel="stylesheet" href="/public/styles.css">
+        <style type="text/tailwindcss">
+                .button {
+                        @apply border border-gray-300 px-4 py-2 rounded hover:bg-gray-200 cursor-pointer;
+                }
+                .link {
+                        @apply underline hover:no-underline uppercase cursor-pointer;
+                }
+        </style>
         <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
 </head>
 

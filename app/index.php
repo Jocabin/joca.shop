@@ -85,6 +85,7 @@ function fetch_json(string $url): mixed
         return $data;
 }
 
+session_start();
 ob_start();
 if (str_ends_with($route, '/')) {
         $route = substr_replace($route, '', -1);
@@ -97,6 +98,9 @@ switch ($route) {
                 require __DIR__ . '/views/home.php';
                 break;
 
+        case '/products':
+                header('Location: /');
+
         case '/about':
                 $page_title = 'joca.shop | About us.';
                 require __DIR__ . '/views/about.php';
@@ -106,9 +110,32 @@ switch ($route) {
                 require __DIR__ . '/views/product_detail.php';
                 break;
 
-                // case '/htmx':
-                //         echo '<p>hello</p>';
-                //         break;
+        case '/cart':
+                $page_title = 'joca.shop | Your cart.';
+                require __DIR__ . '/views/cart.php';
+                break;
+
+        case (str_starts_with($route, '/htmx/product-img') ? true : false):
+                $i = $_SESSION['img_index'];
+                $product = $_SESSION['product'];
+                $cnt = count($product['images']);
+
+                if ($_GET["dir"] === "prev") {
+                        $i = ($_SESSION['img_index'] - 1 + $cnt) % $cnt;
+                } else if ($_GET["dir"] === "next") {
+                        $i = ($_SESSION['img_index'] + 1) % $cnt;
+                }
+
+                $_SESSION['img_index'] = $i;
+                echo '<img src="' . $product["images"][$i] . '" alt="' . $product["description"] . '" width="500" height="500">';
+                break;
+
+        case '/add-to-cart':
+                if (!isset($_GET['product_id'])) {
+                        return 'erreur';
+                }
+                $_SESSION['cart'] = [];
+                break;
 
         default:
                 $page_title = 'joca.shop | Page not found.';

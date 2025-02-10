@@ -99,7 +99,8 @@ switch ($route) {
                 break;
 
         case '/products':
-                header('Location: /');
+                header('Location: /', true, 301);
+                exit();
 
         case '/about':
                 $page_title = 'joca.shop | About us.';

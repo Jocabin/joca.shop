@@ -7,5 +7,5 @@ $cart_count = count($_SESSION['cart']);
                 <a class="link" href="/">Products</a>
                 <a class="link" href="/about">About</a>
         </nav>
-        <a class="link" href="/cart">Cart(<?= $cart_count ?>)</a>
+        <a id="cart_link" class="link" href="/cart">Cart(<?= $cart_count ?>)</a>
 </header>

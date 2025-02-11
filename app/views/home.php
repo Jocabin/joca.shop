@@ -1,5 +1,6 @@
 <?php
-$products = fetch_json("https://api.escuelajs.co/api/v1/products?limit=28&offset=0");
+global $request_context;
+$products = $request_context['data']['products'];
 ?>
 
 <section>
@@ -9,7 +10,7 @@ $products = fetch_json("https://api.escuelajs.co/api/v1/products?limit=28&offset
                                 <a
                                         href="/products/<?= $product['id'] ?>"
                                         class="max-w-[200px] h-full flex justify-start items-center flex-col border border-gray-200 hover:border-gray-500 rounded">
-                                        <img src="<?= $product["images"][0] ?>" alt="<?= $product["description"] ?>" width="200" height="200">
+                                        <img src="<?= $product["image"] ?>" alt="<?= $product["description"] ?>" width="200" height="200" class="object-contain p-4 max-w-[200px] max-h-[200px]">
                                         <p class="text-center p-4"><?= $product["title"]; ?></p>
                                 </a>
                         </li>

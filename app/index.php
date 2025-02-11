@@ -1,169 +1,80 @@
 <?php
-$route = $_SERVER['REQUEST_URI'];
-$route_params = [];
-$page_title = '';
-$hxRequest = isset($_SERVER['HTTP_HX_REQUEST']) && $_SERVER['HTTP_HX_REQUEST'] == 'true';
+$router = [];
+$request_context = [
+        'page_title' => '',
+        'hx_request' => isset($_SERVER['HTTP_HX_REQUEST']) && $_SERVER['HTTP_HX_REQUEST'] == 'true',
+        'route_params' => [],
+        'content' => '',
+        'data' => []
+];
+
+require __DIR__ . "/utils.php";
 
 register_shutdown_function(function () {
-        global $content, $hxRequest, $viewDir, $page_title;
-        if ($hxRequest) {
-                echo $content;
+        global $request_context;
+
+        if ($request_context['hx_request']) {
+                echo $request_context['content'];
         } else {
-                require __DIR__ . '/views/_layout.php';
+                load_template('_layout');
         }
 });
-
-function exception_handler($throwable): void
-{
-        global $content;
-        $content = 'Error: ' . $throwable->getMessage() . ' in ' . $throwable->getFile() . ' on line ' . $throwable->getLine() . PHP_EOL;
-}
 set_exception_handler('exception_handler');
 
-function get_sqlite_connection(): ?PDO
-{
-        $sqlite_file = __DIR__ . '/database.sqlite';
-        try {
-                $conn = new PDO("sqlite:" . $sqlite_file);
-                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                return $conn;
-        } catch (PDOException $exception) {
-                exception_handler($exception);
-                return null;
-        }
-}
+add_route($router, '/', 'GET', function () {
+        global $request_context;
+        $products = fetch_json("https://fakestoreapi.com/products");
+        $request_context['data']['products'] = $products;
 
-function route_with_params(string $str): bool
-{
-        global $route, $route_params;
-        $pattern = '';
-        $parts = explode('/', $str);
-        $static_parts = [];
-        $match_results = [];
-
-        foreach ($parts as $idx => $p) {
-                if (str_starts_with($p, '[') && str_ends_with($p, ']')) {
-                        $parts[$idx] = '[^\s]+';
-                } else {
-                        $static_parts[] = $p;
-                }
-        }
-
-        $pattern = '#^' . join('/', $parts) . '#';
-        $is_matched = preg_match($pattern, $route, $match_results) ? true : false;
-
-        if ($is_matched === true) {
-                $matched_route = explode('/', $match_results[0]);
-                $parts = explode('/', $str);
-
-                for ($i = 0; $i < count($parts); $i += 1) {
-                        if ($parts[$i] !== $matched_route[$i]) {
-                                $key = trim(trim($parts[$i], '['), ']');
-                                $route_params[$key] = $matched_route[$i];
-                        }
-                }
-        }
-
-        return $is_matched;
-}
-
-function page_not_found(): void
-{
-        global $content;
-        http_response_code(404);
-        require __DIR__  . '/views/404.php';
-        $content = ob_get_clean();
+        title('We are the best.');
+        load_template('home');
+});
+add_route($router, '/products', 'GET', function () {
+        header('Location: /', true, 301);
         exit();
-}
+});
+add_route($router, '/products/[id]', 'GET', function () {
+        global $request_context;
+        $product = fetch_json("https://fakestoreapi.com/products/" . $request_context['route_params']['id']);
 
-function title(string $str): void
-{
-        global $page_title;
-        $page_title =  "joca.shop | " . $str;
-}
+        if (!isset($product['id'])) {
+                page_not_found();
+        }
 
-function fetch_json(string $url): mixed
-{
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $data = json_decode(curl_exec($ch), true);
-        curl_close($ch);
-        return $data;
-}
+        $request_context['data']['product'] = $product;
+
+        title($product['title']);
+        load_template('product_detail');
+}, $is_route_dynamic = true);
+add_route($router, '/about', 'GET', function () {
+        title('About us.');
+        load_template('about');
+});
+add_route($router, '/cart', 'GET', function () {
+        title('Your cart.');
+        load_template('cart');
+});
+add_route($router, '/add-to-cart', 'POST', function () {
+        $product_id = $_POST['product_id'];
+        $is_product_in_cart = isset($_SESSION['cart'][$product_id]);
+
+        if ($is_product_in_cart) {
+                unset($_SESSION['cart'][$product_id]);
+                echo 'Buy for ' . $_POST['product_price'] . '€';
+        } else {
+                $cart_item = [
+                        'id' => $product_id,
+                        'name' => $_POST['product_name'],
+                        'price' => $_POST['product_price']
+                ];
+                $_SESSION['cart'][$product_id] = $cart_item;
+                echo 'Remove product from cart';
+        }
+        echo '<a id="cart_link" hx-swap-oob="#cart_link" class="link" href="/cart">Cart(' . count($_SESSION['cart']) . ')</a>';
+});
 
 session_start();
 if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
 }
-
-ob_start();
-if (str_ends_with($route, '/')) {
-        $route = substr_replace($route, '', -1);
-}
-
-// todo: refactor pour ressembler à echo web server
-switch ($route) {
-        case '':
-        case '/':
-                title('We are the best.');
-                require __DIR__ . '/views/home.php';
-                break;
-
-        case '/products':
-                header('Location: /', true, 301);
-                exit();
-
-        case '/about':
-                title('About us.');
-                require __DIR__ . '/views/about.php';
-                break;
-
-        case route_with_params('/products/[id]'):
-                require __DIR__ . '/views/product_detail.php';
-                break;
-
-        case '/cart':
-                title('Your cart.');
-                require __DIR__ . '/views/cart.php';
-                break;
-
-        case (str_starts_with($route, '/htmx/product-img') ? true : false):
-                $i = $_SESSION['img_index'];
-                $product = $_SESSION['product'];
-                $cnt = count($product['images']);
-
-                if ($_GET["dir"] === "prev") {
-                        $i = ($_SESSION['img_index'] - 1 + $cnt) % $cnt;
-                } else if ($_GET["dir"] === "next") {
-                        $i = ($_SESSION['img_index'] + 1) % $cnt;
-                }
-
-                $_SESSION['img_index'] = $i;
-                echo '<img src="' . $product["images"][$i] . '" alt="' . $product["description"] . '" width="500" height="500">';
-                break;
-
-        case '/add-to-cart':
-                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                        $product_id = $_POST['product_id'];
-                        $product_name = $_POST['product_name'];
-                        $product_price = $_POST['product_price'];
-                        $cart_item = [
-                                'id' => $product_id,
-                                'name' => $product_name,
-                                'price' => $product_price
-                        ];
-
-                        $_SESSION['cart'][$product_id] = $cart_item;
-                }
-
-                header('Location: /products/' . $product_id);
-                exit();
-
-                break;
-
-        default:
-                $page_title = 'joca.shop | Page not found.';
-                http_response_code(404);
-                require __DIR__ . '/views/404.php';
-}
-$content = ob_get_clean();
+match_route($router, $_SERVER['REQUEST_URI']);

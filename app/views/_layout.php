@@ -1,4 +1,5 @@
 <!-- todo: optimiser selon la vidéo de wesbos -->
+<!-- todo: multilang website -->
 <?php global $request_context; ?>
 
 <!DOCTYPE html>

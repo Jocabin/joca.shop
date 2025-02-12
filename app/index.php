@@ -65,6 +65,8 @@ add_route($router, '/add-to-cart', 'POST', function () {
                 $cart_item = [
                         'id' => $product_id,
                         'name' => $_POST['product_name'],
+                        'image' => $_POST['product_image'],
+                        'description' => $_POST['product_description'],
                         'price' => $_POST['product_price']
                 ];
                 $_SESSION['cart'][$product_id] = $cart_item;

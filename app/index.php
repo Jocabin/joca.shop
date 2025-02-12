@@ -74,6 +74,15 @@ add_route($router, '/add-to-cart', 'POST', function () {
         }
         echo '<a id="cart_link" hx-swap-oob="#cart_link" class="link" href="/cart">Cart(' . count($_SESSION['cart']) . ')</a>';
 });
+add_route($router, '/checkout', 'GET', function () {
+        $cart = $_SESSION['cart'];
+        if (empty($cart)) {
+                header('Location: /');
+        }
+
+        title('Proceed to checkout');
+        load_template('checkout');
+});
 
 session_start();
 if (!isset($_SESSION['cart'])) {

@@ -3,6 +3,21 @@ global $request_context;
 $products = $request_context['data']['products'];
 ?>
 
+<?php
+// $conn = get_db();
+// if (!$conn) {
+//         echo "Failed to establish a connection to the local SQLite database." . PHP_EOL;
+// }
+
+// $stmt = $conn->prepare("SELECT * FROM products");
+// $stmt->execute();
+// $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// foreach ($result as $row) {
+//         echo $row['id'] . ' - ' . $row['name'] . PHP_EOL;
+// }
+?>
+
 <section class="w-full h-full">
         <ul class="products_grid p-8 w-full gap-16">
                 <?php foreach ($products as $product): ?>

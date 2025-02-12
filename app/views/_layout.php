@@ -29,7 +29,7 @@
 <body class="flex flex-col justify-between items-center h-full min-h-screen">
         <?php include(__DIR__ . '/../components/header.php'); ?>
 
-        <main class="w-full h-full"><?= $request_context['content']; ?></main>
+        <main class="w-full h-full flex-1 flex items-stretch"><?= $request_context['content']; ?></main>
 
         <footer class="flex justify-center items-center p-8">
                 <p>&copy; <a href="/">joca.shop</a>&nbsp;-&nbsp;<?= date('Y'); ?></p>

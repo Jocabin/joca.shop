@@ -4,7 +4,7 @@ $product = $request_context['data']['product'];
 $is_product_in_cart = isset($_SESSION['cart'][$product['id']]);
 ?>
 
-<div class="flex flex-col justify-start items-center gap-4 p-8">
+<div class="w-full flex flex-col justify-center items-center gap-4 p-8">
         <div class="flex flex-col justify-center items-center">
                 <div id="product_img" class="max-w-[500px] max-h-[500px] bg-gray-100 rounded overflow-hidden">
                         <img src="<?= $product['image'] ?>" alt="<?= $product['description'] ?>" width="500" height="500">

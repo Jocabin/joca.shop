@@ -3,7 +3,7 @@ global $request_context;
 $products = $request_context['data']['products'];
 ?>
 
-<section>
+<section class="w-full h-full">
         <ul class="products_grid p-8 w-full gap-16">
                 <?php foreach ($products as $product): ?>
                         <li>

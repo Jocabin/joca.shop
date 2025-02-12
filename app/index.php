@@ -47,7 +47,7 @@ add_route($router, '/products/[id]', 'GET', function () {
         load_template('product_detail');
 }, $is_route_dynamic = true);
 add_route($router, '/about', 'GET', function () {
-        title('About us.');
+        title('About this site.');
         load_template('about');
 });
 add_route($router, '/cart', 'GET', function () {
@@ -82,6 +82,8 @@ add_route($router, '/checkout', 'GET', function () {
 
         title('Proceed to checkout');
         load_template('checkout');
+});
+add_route($router, '/submit-checkout', 'POST', function () {
 });
 
 session_start();

@@ -1,6 +1,11 @@
 <?php
 $is_cart_empty = empty($_SESSION['cart']);
 $cart = $_SESSION['cart'];
+$cart_total = 0;
+
+foreach ($cart as $item) {
+        $cart_total += $item['price'];
+}
 ?>
 
 <div>
@@ -14,4 +19,9 @@ $cart = $_SESSION['cart'];
                         </li>
                 <?php endforeach; ?>
         </ul>
+
+        <div class="w-full sticky bottom-0 bg-gray-100 p-8 my-8 flex flex-col justify-center items-center gap-4">
+                <p>Total price: <span class="font-bold"><?= $cart_total ?>€</span></p>
+                <a class="button" href="/checkout">Proceed to checkout</a>
+        </div>
 </div>

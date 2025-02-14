@@ -1,4 +1,3 @@
-# todo: complete the file to be prod ready
 localhost:1836 {
 	root * ./app
 	encode zstd gzip

@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-8 p-8">
-        <h1 class="font-bold text-2xl">About this site.</h1>
+        <h1 class="h1">About this site.</h1>
         <p class="leading-8">
                 This site is a “proof of concept” that it's possible to make a complete, accessible, high-performance, featurefull website using simple, no-frills technologies.
                 <br>

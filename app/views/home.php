@@ -18,8 +18,10 @@ $products = $request_context['data']['products'];
 // }
 ?>
 
-<section class="w-full h-full">
-        <ul class="products_grid p-8 w-full gap-16">
+<section class="w-full h-full p-8">
+        <h1 class="h1 text-center mb-8">Our products.</h1>
+
+        <ul class="products_grid w-full gap-16">
                 <?php foreach ($products as $product): ?>
                         <li>
                                 <a

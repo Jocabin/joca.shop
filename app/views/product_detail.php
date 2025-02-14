@@ -11,7 +11,7 @@ $is_product_in_cart = isset($_SESSION['cart'][$product['id']]);
                 </div>
         </div>
 
-        <p class="text-2xl font-bold"><?= $product['title'] ?></p>
+        <h1 class="text-2xl font-bold"><?= $product['title'] ?></h1>
 
         <form hx-post="/add-to-cart" class="flex flex-row justify-start items-end gap-4" hx-target="#buy_button">
                 <input type="hidden" name="product_id" value="<?= $product['id'] ?>">

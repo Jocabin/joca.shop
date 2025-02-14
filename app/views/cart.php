@@ -9,7 +9,7 @@ foreach ($cart as $item) {
 ?>
 
 <div class="w-full">
-        <h1 class="text-center font-bold text-2xl my-8">Your cart.</h1>
+        <h1 class="text-center h1 my-8">Your cart.</h1>
         <?php if (empty($cart)): ?>
                 <p class="text-center">Your cart is empty. See our products <a href="/" class="link">here</a>.</p>
         <?php else: ?>
@@ -19,6 +19,7 @@ foreach ($cart as $item) {
                                         <a href="/products/<?= $item['id'] ?>" class="link max-w-[400px] max-h-[400px] flex flex-col justify-center items-center gap-4">
                                                 <img src="<?= $item['image'] ?>" alt="<?= $item['description'] ?>" width="200" height="200" class="object-contain p-4 w-[200px] h-[200px]">
                                                 <span class="text-center"><?= $item['name'] ?></span>
+                                                <span class="text-center font-bold"><?= $item['price'] ?>€</span>
                                         </a>
                                 </li>
                         <?php endforeach; ?>

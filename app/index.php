@@ -75,15 +75,25 @@ add_route($router, '/add-to-cart', 'POST', function () {
         echo '<a id="cart_link" hx-swap-oob="#cart_link" class="link" href="/cart">Cart(' . count($_SESSION['cart']) . ')</a>';
 });
 add_route($router, '/checkout', 'GET', function () {
+        global $request_context;
+
         $cart = $_SESSION['cart'];
         if (empty($cart)) {
                 header('Location: /');
         }
 
+        $cart_total = 0;
+        foreach ($cart as $item) {
+                $cart_total += $item['price'];
+        }
+        $request_context['data']['cart_total'] = $cart_total;
+
         title('Proceed to checkout');
         load_template('checkout');
 });
 add_route($router, '/submit-checkout', 'POST', function () {
+        // todo: validate form infos, and show error messages
+        // todo: create db entry for the order table
 });
 
 session_start();

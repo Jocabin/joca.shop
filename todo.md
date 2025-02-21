@@ -1,5 +1,7 @@
 # Todo list
 
+- [ ] Robots.txt / sitemap.xml
+- [ ] Minifier le code CSS et JS
 - [ ] Complete the Caddyfile to be production ready
 - [ ] Use Tailwind production mode
 - [ ] Optimize the whole website with the Wesbos's video tips

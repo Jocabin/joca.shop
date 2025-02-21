@@ -16,6 +16,9 @@
                 .button {
                         @apply border border-gray-300 px-4 py-2 rounded hover:bg-gray-200 cursor-pointer;
                 }
+                .input {
+                        @apply border border-gray-300 px-4 py-2 rounded;
+                }
                 .link {
                         @apply underline hover:no-underline uppercase cursor-pointer;
                 }

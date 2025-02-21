@@ -28,6 +28,7 @@ add_route($router, '/', 'GET', function () {
 
         title('We are the best.');
         load_template('home');
+        // header("HTTP/1.1 304 Not Modified");
 });
 add_route($router, '/products', 'GET', function () {
         header('Location: /', true, 301);
@@ -79,7 +80,7 @@ add_route($router, '/checkout', 'GET', function () {
 
         $cart = $_SESSION['cart'];
         if (empty($cart)) {
-                header('Location: /');
+                header('Location: /', true, 302);
         }
 
         $cart_total = 0;
